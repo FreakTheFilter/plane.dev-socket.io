@@ -7,6 +7,7 @@
     "format": "prettier . --write"
   },
   "dependencies": {
+    "commander": "11.0.0",
     "socket.io-client": "4.7.2",
     "tslib": "2.5.0"
   },

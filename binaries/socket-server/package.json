@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "ts-node src/index.ts",
+    "package": "docker build --tag socket-server .",
     "lint": "prettier . --check",
     "format": "prettier . --write"
   },
