@@ -18,8 +18,6 @@ services:
       - ./plane-controller/etc/plane/controller.toml:/etc/plane/controller.toml:ro
     command:
       /etc/plane/controller.toml
-    ports:
-      - "127.0.0.1:6090:80"
     networks:
       plane:
         ipv4_address: 172.16.231.11
