@@ -19,7 +19,6 @@ services:
 
 networks:
   nginx-test:
-    name: nginx-test
     driver: bridge
     ipam:
       driver: default

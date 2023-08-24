@@ -1,0 +1,6 @@
+[nats]
+hosts = ["nats"]
+
+[scheduler]
+
+[dns]

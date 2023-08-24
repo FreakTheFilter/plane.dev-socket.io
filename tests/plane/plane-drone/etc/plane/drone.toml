@@ -1,0 +1,39 @@
+# This file contains some examples of Drone configuration.
+# You can run the drone with --dump-config to validate a configuration.
+
+# The cluster domain serves as a namespace for backends. Each drone belongs
+# to exactly one cluster. The cluster_domain is the domain under which
+# backends are assigned their hostnames. For example, a backend with the id
+# "abcde" on the cluster "plane.dev" would have the hostname
+# "abcde.plane.dev".
+cluster_domain = "plane.test"
+
+# The drone connects to the controller over NATS, which can be configured
+# here.
+[nats]
+hosts = ["nats"]
+
+# If this section is present, the drone instance acts as an agent,
+# advertising its availability to the controller and spawning new
+# backends.
+[agent]
+# Instead of a static IP, you can pass a URL of an API server which
+# is expected to return the public IP address of the requestor in
+# plaintext.
+ip = { api = "http://ip-api:8080/" }
+
+# Optional Docker settings for the agent.
+[agent.docker]
+# The runtime to use (defaults to "runc")
+# runtime = "runc"
+network = "plane"
+
+# The method of connecting to Docker. {socket=""} and {http=""} are
+# supported.
+connection = { socket = "/var/run/docker.sock" }
+
+# Proxy configuration. If this section is present, the proxy is
+# served.
+[proxy]
+# IP to listen for connections on.
+bind_ip = "0.0.0.0"

@@ -1,0 +1,66 @@
+version: "3.9"
+services:
+  drone:
+    image: plane/drone:latest
+    volumes:
+      - ./plane-drone/etc/plane/drone.toml:/etc/plane/drone.toml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      /etc/plane/drone.toml
+    networks:
+      - plane
+    depends_on:
+      - controller
+
+  controller:
+    image: plane/controller:latest
+    volumes:
+      - ./plane-controller/etc/plane/controller.toml:/etc/plane/controller.toml:ro
+    command:
+      /etc/plane/controller.toml
+    ports:
+      - "127.0.0.1:6090:80"
+    networks:
+      plane:
+        ipv4_address: 172.16.231.11
+    depends_on:
+      - nats
+      - ip-api
+
+  nats:
+    image: nats:latest
+    command:
+      "--jetstream ${NATS_FLAGS:-}"
+    networks:
+      - plane
+
+  ip-api:
+    image: ghcr.io/drifting-in-space/ip-api:latest
+    networks:
+      - plane
+
+  dnsmasq:
+    networks:
+      plane:
+        ipv4_address: 172.16.231.10
+    build: ./dnsmasq
+    volumes:
+      - ./dnsmasq/etc/dnsmasq.conf:/etc/dnsmasq.conf
+
+  nginx:
+    build: ./nginx
+    networks:
+      - plane
+    volumes:
+      - ./nginx/etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "127.0.0.1:6080:80"
+
+networks:
+  plane:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.231.0/24
+          gateway: 172.16.231.1
