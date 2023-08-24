@@ -1,0 +1,57 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OSX
+.DS_Store
+
+# Build Artifacts
+dist/
+dist-e2e/
+generated/
+.tmp/
+.webpack/
+.vite/
+.rollup.cache/
+*.tsbuildinfo
+storybook-static/
+out/
+electronIcons/
+
+# Dependencies
+node_modules/
+
+# Testing
+coverage/
+__diff_output__/
+
+# Environment Files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.terraform.lock
+*.terraform.lock.*
