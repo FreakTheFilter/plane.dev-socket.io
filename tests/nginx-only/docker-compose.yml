@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   socket-server:
-    build: ../socket-server
+    build: ../../binaries/socket-server
     networks:
       nginx-test:
         ipv4_address: 172.16.230.10
