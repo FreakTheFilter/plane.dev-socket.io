@@ -7,7 +7,13 @@ This repo contains a few components:
 3. `tests/nginx-only/...` ~ A docker compose setup for starting a network which proxies `socket-server` through a nginx server.
 4. `tests/plane/...` ~ A docker compose setup for starting plane.dev locally.
 
-This enables us to run two tests:
+This enables us to run two tests (detailed below).
+
+## Setup
+
+1. Install docker.
+2. Install nvm and `nvm use` in this repo to ensure you're using the right version of npm and node.
+3. Run `npm install` in `binaries/socket-client` and `binaries/socket-server`.
 
 ## Test 1: nginx-only proxy
 
