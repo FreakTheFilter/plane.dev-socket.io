@@ -1,39 +1,44 @@
-# This file contains some examples of Drone configuration.
-# You can run the drone with --dump-config to validate a configuration.
-
 # The cluster domain serves as a namespace for backends. Each drone belongs
 # to exactly one cluster. The cluster_domain is the domain under which
 # backends are assigned their hostnames. For example, a backend with the id
 # "abcde" on the cluster "plane.dev" would have the hostname
-# "abcde.plane.dev".
+# "abcde.plane.dev". Because we're using path based routing instead of host
+# based routing, this string doesn't really matter but we need to set it anyway.
 cluster_domain = "plane.test"
 
-# The drone connects to the controller over NATS, which can be configured
-# here.
+# The drone connects to the controller over NATS, which can be configured here.
 [nats]
-hosts = ["nats"]
+
+hosts = ["plane-nats"]
 
 # If this section is present, the drone instance acts as an agent,
 # advertising its availability to the controller and spawning new
 # backends.
 [agent]
+
 # Instead of a static IP, you can pass a URL of an API server which
 # is expected to return the public IP address of the requestor in
 # plaintext.
-ip = { api = "http://ip-api:8080/" }
+ip = { api = "http://plane-ip-api:8080/" }
 
 # Optional Docker settings for the agent.
 [agent.docker]
-# The runtime to use (defaults to "runc")
-# runtime = "runc"
-network = "plane_plane"
 
-# The method of connecting to Docker. {socket=""} and {http=""} are
-# supported.
+# The runtime to use (defaults to "runc")
+network = "plane"
+
+# The method of connecting to Docker.
 connection = { socket = "/var/run/docker.sock" }
 
 # Proxy configuration. If this section is present, the proxy is
 # served.
 [proxy]
+
 # IP to listen for connections on.
 bind_ip = "0.0.0.0"
+
+# Changes the routing behavior of the proxy to facilitate local development
+# without Host rewrites. If the URL of a proxied request begins with
+# /_plane_backend=[...], the value between that prefix and the next /, or the
+# end of the string, is used as the name of the backend.
+allow_path_routing = true

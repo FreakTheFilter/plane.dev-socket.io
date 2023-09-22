@@ -1,0 +1,22 @@
+# The drone connects to the controller over NATS, which can be configured here.
+[nats]
+
+hosts = ["plane-nats"]
+
+[scheduler]
+
+[dns]
+
+# plane.dev by default uses NATs as its API interface. However, it can be
+# configured to expose an HTTP API that has parity with https://jamsocket.com.
+# We enable here here with the `[http]` configuration group.
+[http]
+
+# The cluster domain serves as a namespace for backends. We namespace all of our
+# local backends under `plane.test`.
+cluster = "plane.test"
+
+# jamsocket is configured with a list of services, each defining the image that
+# is used to bootstrap new backends within that service. We configure that
+# information here.
+services.socket-server = "socket-server:latest"

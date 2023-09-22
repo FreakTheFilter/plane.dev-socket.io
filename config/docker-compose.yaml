@@ -1,0 +1,70 @@
+version: "3.9"
+services:
+  plane-controller:
+    container_name: plane-controller
+    image: plane/controller:latest
+    volumes:
+      - ./plane-controller/etc/plane/controller.toml:/etc/plane/controller.toml:ro
+    command:
+      /etc/plane/controller.toml
+    ports:
+      - "127.0.0.1:6090:9090"
+    networks:
+      plane:
+        # It's very important that this address is static and has parity with
+        # the dnsmasq configuration so that we correctly route `plane.test`
+        # hosts to the controller.
+        ipv4_address: 172.16.238.11
+    depends_on:
+      - plane-nats
+      - plane-ip-api
+      - plane-dnsmasq
+
+  plane-drone:
+    container_name: plane-drone
+    image: plane/drone:latest
+    volumes:
+      - ./plane-drone/etc/plane/drone.toml:/etc/plane/drone.toml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      /etc/plane/drone.toml
+    ports:
+      - "127.0.0.1:6080:80"
+    networks:
+      - plane
+    depends_on:
+      - plane-controller
+
+  plane-nats:
+    container_name: plane-nats
+    image: nats:latest
+    command:
+      "--jetstream ${NATS_FLAGS:-}"
+    networks:
+      - plane
+
+  plane-ip-api:
+    container_name: plane-ip-api
+    image: ghcr.io/drifting-in-space/ip-api:latest
+    networks:
+      - plane
+
+  plane-dnsmasq:
+    container_name: plane-dnsmasq
+    build: ./dnsmasq
+    volumes:
+      - ./dnsmasq/etc/dnsmasq.conf:/etc/dnsmasq.conf
+    networks:
+      - plane
+
+networks:
+  plane:
+    name: plane
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+          # Note that any binaries within the plane network which need to access
+          # ports on the host machine can do so through this gateway.
+          gateway: 172.16.238.1

@@ -4,8 +4,6 @@ const cors = require('cors');
 const express = require('express');
 const socketio = require('socket.io');
 
-const PORT = 8080;
-
 const start = async () => {
   console.log(`Starting at ${new Date()}.`);
 
@@ -30,7 +28,7 @@ const start = async () => {
 
   // Attach health checking endpoints.
 
-  expressApplication.get('/healthz', (_request, response) => {
+  expressApplication.get('/healthz', (request, response) => {
     response.status(200);
     response.send('OK');
   });
@@ -41,13 +39,18 @@ const start = async () => {
 
   // Start the HTTP Server
 
+  if (process.env.PORT == null) {
+    throw new Error(`Env variable PORT must be defined.`);
+  }
+  const port = parseInt(process.env.PORT);
+
   await new Promise<void>((resolve) => {
-    httpServer.listen({ port: PORT }, () => {
+    httpServer.listen({ port: port }, () => {
       resolve();
     });
   });
 
-  console.log(`Ready at ${new Date()} on port ${PORT}.`);
+  console.log(`Ready at ${new Date()} on port ${port}.`);
 
   // Listen for the termination signal and trigger a graceful shutdown.
 
