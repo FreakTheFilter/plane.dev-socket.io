@@ -4,10 +4,9 @@ This repo contains a few components:
 
 1. `binaries/socket-server` ~ A minimal "Hello World" socket.io server.
 2. `binaries/socket-client` ~ A minimal client for connecting to `socket-server`.
-3. `tests/nginx-only/...` ~ A docker compose setup for starting a network which proxies `socket-server` through a nginx server.
-4. `tests/plane/...` ~ A docker compose setup for starting plane.dev locally.
+4. `config/...` ~ A docker compose setup for starting plane.dev locally.
 
-This enables us to run two tests (detailed below).
+This enables us to test socket.io end-to-end using plane.
 
 ## Setup
 
@@ -17,8 +16,8 @@ This enables us to run two tests (detailed below).
 
 ## Start plane
 
-This test is designed to identify if plane.dev is working locally. To test do
-the following:
+This test is designed to identify if plane.dev is working locally with
+socket.io. To test do the following:
 
 Package the `socket-server`:
 
@@ -30,7 +29,7 @@ npm run package
 start plane:
 
 ```sh
-cd tests/plane
+cd config
 docker compose up
 ```
 
