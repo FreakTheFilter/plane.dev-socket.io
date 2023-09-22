@@ -8,7 +8,7 @@ commander.program
     console.log(`Attempting to connection to backend ${backend}.`);
 
     const socket = socketio.io('ws://localhost:6080', {
-      path: `/${backend}/connect`,
+      path: `/_plane_backend=${backend}/connect`,
     });
 
     socket.on('connect', () => {
